@@ -557,6 +557,7 @@ body {
   background: var(--border);
   border-radius: 2px;
 }
+
   </style>
 </head>
 <body>
@@ -577,17 +578,17 @@ body {
   "draw": {
     "structure_header": "I.",
     "structure_label": "Structure",
-    "drawing_structure": "Drawing your structure…",
+    "drawing_structure": "Drawing your structure\u2026",
     "accept_structure": "Accept",
     "choice_header": "II.",
     "choice_label": "Choose your second constraint",
     "choose_rhythm": "Rhythm",
     "choose_texture": "Texture",
-    "drawing_constraint": "Drawing…",
+    "drawing_constraint": "Drawing\u2026",
     "accept_constraint": "Accept",
     "chaos_header": "III.",
     "chaos_label": "Chaos Malediction",
-    "drawing_chaos": "Drawing the malediction…",
+    "drawing_chaos": "Drawing the malediction\u2026",
     "chaos_warning": "This cannot be skipped.",
     "accept_chaos": "I understand. Accept."
   },
@@ -608,7 +609,7 @@ body {
     "friction_label": "How difficult was this session?",
     "friction_sublabel": "Rate the friction, 1 to 10.",
     "note_label": "One sentence. Optional.",
-    "note_placeholder": "…",
+    "note_placeholder": "\u2026",
     "share_button": "Share ritual",
     "share_copied": "Copied to clipboard.",
     "share_unsupported": "Copy manually from the session log above."
@@ -753,7 +754,7 @@ body {
   {
     "id": "texture_008",
     "title": "The Mirror",
-    "description": "Split the ensemble into two groups. Group B must mirror Group A in real time — every attack reflected, every rest doubled. They are inseparable."
+    "description": "Split the ensemble into two groups. Group B must mirror Group A in real time \u2014 every attack reflected, every rest doubled. They are inseparable."
   }
 ]
   </script>
@@ -787,7 +788,7 @@ body {
   {
     "id": "chaos_006",
     "title": "The Confession",
-    "description": "Embed a personal sound — a recording of your voice, a room you know, an object you own — somewhere in the piece. It must be audible. It cannot be processed beyond recognition."
+    "description": "Embed a personal sound \u2014 a recording of your voice, a room you know, an object you own \u2014 somewhere in the piece. It must be audible. It cannot be processed beyond recognition."
   },
   {
     "id": "chaos_007",
@@ -797,7 +798,7 @@ body {
   {
     "id": "chaos_008",
     "title": "The Borrowed Time",
-    "description": "You must quote — verbatim, unaltered — at least four bars from a piece of music you did not write. It must be woven into the structure as if it belongs."
+    "description": "You must quote \u2014 verbatim, unaltered \u2014 at least four bars from a piece of music you did not write. It must be woven into the structure as if it belongs."
   },
   {
     "id": "chaos_009",
@@ -812,17 +813,17 @@ body {
   {
     "id": "chaos_011",
     "title": "The Weight",
-    "description": "The piece must contain at least one passage of sustained, deliberate discomfort. Not tension that resolves — discomfort that persists. The listener must not be able to look away."
+    "description": "The piece must contain at least one passage of sustained, deliberate discomfort. Not tension that resolves \u2014 discomfort that persists. The listener must not be able to look away."
   },
   {
     "id": "chaos_012",
     "title": "The Collaborator",
-    "description": "Contact one other person. Give them a single constraint — not one of yours. Incorporate their response into the piece without explanation."
+    "description": "Contact one other person. Give them a single constraint \u2014 not one of yours. Incorporate their response into the piece without explanation."
   }
 ]
   </script>
 
-  <!-- Application scripts (inlined, dependency order) -->
+  <!-- Application scripts -->
   <script>
 /**
  * state.js — Songforge State Manager
@@ -924,6 +925,13 @@ const State = (() => {
     _state.session.note = note;
   }
 
+  function resetConstraints() {
+    _state.structure = null;
+    _state.constraint = null;
+    _state.chaos = null;
+    _state.constraintType = null;
+  }
+
   // --- Timer ---
   function startTimer() {
     _state.session.startedAt = Date.now();
@@ -994,9 +1002,11 @@ const State = (() => {
     startTimer,
     getTimeRemaining,
     saveSession,
-    getHistory
+    getHistory,
+    resetConstraints
   };
 })();
+
   </script>
   <script>
 /**
@@ -1037,6 +1047,7 @@ const Draw = (() => {
 
   return { one };
 })();
+
   </script>
   <script>
 /**
@@ -1104,12 +1115,12 @@ const Log = (() => {
       '─────────────────────────'
     ];
 
-    return lines.join('
-');
+    return lines.join('\n');
   }
 
   return { generate };
 })();
+
   </script>
   <script>
 /**
@@ -1159,14 +1170,21 @@ const UI = (() => {
     `;
 
     document.getElementById('btn-begin').addEventListener('click', () => {
+      State.resetConstraints();
       State.setPhase('draw_structure');
     });
   }
 
   function renderDrawStructure() {
     setBodyClass('phase-draw');
-    const drawn = Draw.one(State.get('data').structures);
-    State.setStructure(drawn);
+    
+    // Only draw if we haven't drawn yet
+    let drawn = State.get('structure');
+    if (!drawn) {
+      drawn = Draw.one(State.get('data').structures);
+      State.setStructure(drawn);
+      return; // Exit and let the state change trigger a re-render
+    }
 
     root.innerHTML = `
       <div class="screen screen-draw">
@@ -1219,12 +1237,20 @@ const UI = (() => {
 
   function renderDrawConstraint() {
     setBodyClass('phase-draw');
+    
+    // Only draw if we haven't drawn yet
+    let drawn = State.get('constraint');
+    if (!drawn) {
+      const type = State.get('constraintType');
+      const pool = type === 'rhythm'
+        ? State.get('data').rhythms
+        : State.get('data').textures;
+      drawn = Draw.one(pool);
+      State.setConstraint(drawn);
+      return; // Exit and let the state change trigger a re-render
+    }
+
     const type = State.get('constraintType');
-    const pool = type === 'rhythm'
-      ? State.get('data').rhythms
-      : State.get('data').textures;
-    const drawn = Draw.one(pool);
-    State.setConstraint(drawn);
 
     root.innerHTML = `
       <div class="screen screen-draw">
@@ -1249,8 +1275,14 @@ const UI = (() => {
 
   function renderDrawChaos() {
     setBodyClass('phase-draw phase-chaos');
-    const drawn = Draw.one(State.get('data').chaos);
-    State.setChaos(drawn);
+    
+    // Only draw if we haven't drawn yet
+    let drawn = State.get('chaos');
+    if (!drawn) {
+      drawn = Draw.one(State.get('data').chaos);
+      State.setChaos(drawn);
+      return; // Exit and let the state change trigger a re-render
+    }
 
     root.innerHTML = `
       <div class="screen screen-draw">
@@ -1449,9 +1481,10 @@ const UI = (() => {
 
   return { init };
 })();
+
   </script>
 
-  <!-- Bootstrap: reads inline JSON, populates State, starts UI -->
+  <!-- Bootstrap -->
   <script>
 (function bootstrap() {
   try {
