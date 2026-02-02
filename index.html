@@ -562,8 +562,6 @@ body {
 </head>
 <body>
   <div id="app"></div>
-
-  <!-- Inline JSON data -->
   <script id="data-strings" type="application/json">
 {
   "app": {
@@ -822,8 +820,6 @@ body {
   }
 ]
   </script>
-
-  <!-- Application scripts -->
   <script>
 /**
  * state.js — Songforge State Manager
@@ -918,7 +914,7 @@ const State = (() => {
 
   function setFrictionRating(rating) {
     _state.session.frictionRating = rating;
-    _notify();
+    // Don't notify - this is just data, not a phase change
   }
 
   function setNote(note) {
@@ -1483,8 +1479,6 @@ const UI = (() => {
 })();
 
   </script>
-
-  <!-- Bootstrap -->
   <script>
 (function bootstrap() {
   try {
@@ -1493,13 +1487,11 @@ const UI = (() => {
       if (!el) throw new Error('Missing data element: ' + id);
       return JSON.parse(el.textContent);
     }
-
     State.setStrings(loadInlineJSON('data-strings'));
     State.setData('structures', loadInlineJSON('data-structures'));
     State.setData('rhythms',    loadInlineJSON('data-rhythms'));
     State.setData('textures',   loadInlineJSON('data-textures'));
     State.setData('chaos',      loadInlineJSON('data-chaos'));
-
     UI.init();
   } catch (err) {
     document.getElementById('app').innerHTML =
