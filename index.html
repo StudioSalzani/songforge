@@ -145,6 +145,20 @@ body {
   background: rgba(139, 58, 58, 0.06);
 }
 
+/* Secondary button - less prominent */
+.btn-secondary {
+  border-color: var(--border);
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  max-width: 240px;
+  margin-top: 12px;
+}
+.btn-secondary:hover {
+  border-color: var(--border-active);
+  color: var(--text-primary);
+  background: var(--bg-raised);
+}
+
 /* ═══════════════════════════════════════════════════════
    SCREEN: ONBOARDING
    ═══════════════════════════════════════════════════════ */
@@ -531,8 +545,8 @@ body {
   color: var(--text-muted);
 }
 
-/* Share feedback */
-.share-feedback {
+/* Action feedback (download/copy confirmation) */
+.action-feedback {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--accent-dim);
@@ -542,7 +556,7 @@ body {
   transition: opacity 300ms ease;
 }
 
-.share-feedback.visible {
+.action-feedback.visible {
   opacity: 1;
 }
 
@@ -608,9 +622,11 @@ body {
     "friction_sublabel": "Rate the friction, 1 to 10.",
     "note_label": "One sentence. Optional.",
     "note_placeholder": "\u2026",
-    "share_button": "Share ritual",
-    "share_copied": "Copied to clipboard.",
-    "share_unsupported": "Copy manually from the session log above."
+    "download_button": "Download session log",
+    "copy_button": "Copy to clipboard",
+    "download_success": "Log saved.",
+    "copy_success": "Copied to clipboard.",
+    "copy_unsupported": "Copy manually from the session log above."
   }
 }
   </script>
@@ -1404,8 +1420,9 @@ const UI = (() => {
             <input type="text" id="note-input" class="note-input" placeholder="${t('end.note_placeholder')}" autocomplete="off" />
           </div>
 
-          <button class="btn-ritual" id="btn-share">${t('end.share_button')}</button>
-          <p class="share-feedback" id="share-feedback"></p>
+          <button class="btn-ritual" id="btn-download">${t('end.download_button')}</button>
+          <button class="btn-ritual btn-secondary" id="btn-copy">${t('end.copy_button')}</button>
+          <p class="action-feedback" id="action-feedback"></p>
         </div>
       </div>
     `;
@@ -1430,22 +1447,51 @@ const UI = (() => {
       updateLog();
     });
 
-    // Share button
-    document.getElementById('btn-share').addEventListener('click', () => {
+    // Download button - primary action
+    document.getElementById('btn-download').addEventListener('click', () => {
       const currentLog = Log.generate(State.getState());
-      const feedback = document.getElementById('share-feedback');
+      const feedback = document.getElementById('action-feedback');
 
-      // Save session to history on share
+      // Save session to history on download
       State.saveSession();
+
+      // Generate filename: songforge_YYYYMMDD_HHMM.txt
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const mins = String(now.getMinutes()).padStart(2, '0');
+      const filename = `songforge_${year}${month}${day}_${hours}${mins}.txt`;
+
+      // Create download
+      const blob = new Blob([currentLog], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      // Show feedback
+      feedback.textContent = t('end.download_success');
+      feedback.classList.add('visible');
+      setTimeout(() => feedback.classList.remove('visible'), 2500);
+    });
+
+    // Copy button - secondary action
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const currentLog = Log.generate(State.getState());
+      const feedback = document.getElementById('action-feedback');
 
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(currentLog).then(() => {
-          feedback.textContent = t('end.share_copied');
+          feedback.textContent = t('end.copy_success');
           feedback.classList.add('visible');
           setTimeout(() => feedback.classList.remove('visible'), 2500);
         });
       } else {
-        feedback.textContent = t('end.share_unsupported');
+        feedback.textContent = t('end.copy_unsupported');
         feedback.classList.add('visible');
         setTimeout(() => feedback.classList.remove('visible'), 3000);
       }
