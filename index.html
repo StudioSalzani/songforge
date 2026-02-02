@@ -423,6 +423,45 @@ body {
   50%      { opacity: 0.7; }
 }
 
+/* Constraints display during timer */
+.timer-constraints {
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.timer-constraint {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.timer-constraint:last-child {
+  border-bottom: none;
+}
+
+.timer-constraint-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.timer-constraint-title {
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
 /* ═══════════════════════════════════════════════════════
    SCREEN: END
    ═══════════════════════════════════════════════════════ */
@@ -1375,12 +1414,32 @@ const UI = (() => {
     // On first render, build the full layout.
     // On subsequent ticks, update only the time text to avoid flicker.
     if (!document.getElementById('timer-display')) {
+      const s = State.get('structure');
+      const c = State.get('constraint');
+      const ch = State.get('chaos');
+      const cType = State.get('constraintType');
+
       root.innerHTML = `
         <div class="screen screen-timer">
           <div class="timer-inner">
             <div class="timer-display" id="timer-display">
               <span class="timer-time" id="timer-time">${mins}:${secs}</span>
               <span class="timer-label">${t('timer.label')}</span>
+            </div>
+            
+            <div class="timer-constraints">
+              <div class="timer-constraint">
+                <span class="timer-constraint-label">I. Structure</span>
+                <span class="timer-constraint-title">${s.title}</span>
+              </div>
+              <div class="timer-constraint">
+                <span class="timer-constraint-label">II. ${cType.charAt(0).toUpperCase() + cType.slice(1)}</span>
+                <span class="timer-constraint-title">${c.title}</span>
+              </div>
+              <div class="timer-constraint">
+                <span class="timer-constraint-label">III. Chaos</span>
+                <span class="timer-constraint-title">${ch.title}</span>
+              </div>
             </div>
           </div>
         </div>
