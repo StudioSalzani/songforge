@@ -881,6 +881,16 @@ const State = (() => {
   // --- Setters (controlled mutations) ---
   function setPhase(phase) {
     _state.phase = phase;
+    
+    // Stop the timer if we're entering the end phase
+    if (phase === 'end' && _state.timer.intervalId) {
+      clearInterval(_state.timer.intervalId);
+      _state.timer.intervalId = null;
+      if (!_state.session.endedAt) {
+        _state.session.endedAt = Date.now();
+      }
+    }
+    
     _notify();
   }
 
