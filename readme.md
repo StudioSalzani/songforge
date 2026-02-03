@@ -1,6 +1,6 @@
 # Songforge — The Book of Maledictions
 
-Songforge is a constraint-based music composition tool.
+Songforge is a constraint-based music composition ritual.
 
 It is designed to force completion, not inspiration.
 
@@ -46,6 +46,8 @@ If you are looking for comfort or flexibility, this tool will be frustrating.
 7. A session log is generated.
 
 That is all.
+
+Once the session begins, nothing can be changed.
 
 ---
 
