@@ -159,6 +159,21 @@ body {
   background: var(--bg-raised);
 }
 
+/* Tertiary button - minimal, almost invisible */
+.btn-tertiary {
+  border-color: transparent;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  max-width: 200px;
+  margin-top: 24px;
+  letter-spacing: 0.18em;
+}
+.btn-tertiary:hover {
+  border-color: var(--border);
+  color: var(--text-secondary);
+  background: transparent;
+}
+
 /* ═══════════════════════════════════════════════════════
    SCREEN: ONBOARDING
    ═══════════════════════════════════════════════════════ */
@@ -383,8 +398,16 @@ body {
    SCREEN: TIMER
    ═══════════════════════════════════════════════════════ */
 
+.screen-timer {
+  overflow-y: auto;
+  align-items: flex-start;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
 .timer-inner {
   text-align: center;
+  width: 100%;
 }
 
 .timer-display {
@@ -428,8 +451,8 @@ body {
   margin-top: 64px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 420px;
+  gap: 20px;
+  max-width: 520px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -437,9 +460,10 @@ body {
 .timer-constraint {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-bottom: 16px;
+  gap: 6px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
+  text-align: left;
 }
 
 .timer-constraint:last-child {
@@ -457,9 +481,16 @@ body {
 .timer-constraint-title {
   font-family: var(--font-title);
   font-size: 1.1rem;
-  font-weight: 300;
-  color: var(--text-secondary);
+  font-weight: 400;
+  color: var(--text-primary);
   letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.timer-constraint-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -663,8 +694,10 @@ body {
     "note_placeholder": "\u2026",
     "download_button": "Download session log",
     "copy_button": "Copy to clipboard",
+    "share_button": "Share ritual",
     "download_success": "Log saved.",
     "copy_success": "Copied to clipboard.",
+    "share_success": "Share text copied.",
     "copy_unsupported": "Copy manually from the session log above."
   }
 }
@@ -894,8 +927,8 @@ const State = (() => {
     constraint: null,          // { id, title, description }
     chaos: null,               // { id, title, description }
     timer: {
-      total: 3600,             // 60 minutes in seconds
-      remaining: 3600,
+      total: 30,               // 30 seconds for testing (production: 3600)
+      remaining: 30,
       intervalId: null
     },
     session: {
@@ -1431,14 +1464,17 @@ const UI = (() => {
               <div class="timer-constraint">
                 <span class="timer-constraint-label">I. Structure</span>
                 <span class="timer-constraint-title">${s.title}</span>
+                <p class="timer-constraint-desc">${s.description}</p>
               </div>
               <div class="timer-constraint">
                 <span class="timer-constraint-label">II. ${cType.charAt(0).toUpperCase() + cType.slice(1)}</span>
                 <span class="timer-constraint-title">${c.title}</span>
+                <p class="timer-constraint-desc">${c.description}</p>
               </div>
               <div class="timer-constraint">
                 <span class="timer-constraint-label">III. Chaos</span>
                 <span class="timer-constraint-title">${ch.title}</span>
+                <p class="timer-constraint-desc">${ch.description}</p>
               </div>
             </div>
           </div>
@@ -1481,6 +1517,7 @@ const UI = (() => {
 
           <button class="btn-ritual" id="btn-download">${t('end.download_button')}</button>
           <button class="btn-ritual btn-secondary" id="btn-copy">${t('end.copy_button')}</button>
+          <button class="btn-ritual btn-tertiary" id="btn-share">${t('end.share_button')}</button>
           <p class="action-feedback" id="action-feedback"></p>
         </div>
       </div>
@@ -1553,6 +1590,42 @@ const UI = (() => {
         feedback.textContent = t('end.copy_unsupported');
         feedback.classList.add('visible');
         setTimeout(() => feedback.classList.remove('visible'), 3000);
+      }
+    });
+
+    // Share button - tertiary action
+    document.getElementById('btn-share').addEventListener('click', () => {
+      const feedback = document.getElementById('action-feedback');
+      
+      const shareText = `I completed a Songforge session.
+
+60 minutes.
+Mandatory constraints.
+Forced export.
+
+https://studiosalzani.github.io/songforge/`;
+
+      // Try Web Share API first (mobile)
+      if (navigator.share) {
+        navigator.share({
+          text: shareText
+        }).catch(() => {
+          // User cancelled share - do nothing, no feedback needed
+        });
+      } 
+      // Desktop: try Twitter intent
+      else if (window.innerWidth >= 768) {
+        const tweetText = encodeURIComponent(shareText);
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+        window.open(twitterUrl, '_blank', 'width=550,height=420');
+      }
+      // Fallback: copy to clipboard
+      else if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(shareText).then(() => {
+          feedback.textContent = t('end.share_success');
+          feedback.classList.add('visible');
+          setTimeout(() => feedback.classList.remove('visible'), 2500);
+        });
       }
     });
   }
