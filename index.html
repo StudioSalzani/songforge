@@ -927,8 +927,8 @@ const State = (() => {
     constraint: null,          // { id, title, description }
     chaos: null,               // { id, title, description }
     timer: {
-      total: 30,               // 30 seconds for testing (production: 3600)
-      remaining: 30,
+      total: 3600,             // 60 minutes in seconds
+      remaining: 3600,
       intervalId: null
     },
     session: {
