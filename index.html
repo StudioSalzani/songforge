@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=IBM+Plex+Mono:wght@400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
   <style>
+
 /* ═══════════════════════════════════════════════════════
    SONGFORGE — The Book of Maledictions
    Master Stylesheet
@@ -242,21 +243,9 @@ body {
 }
 
 /* Constraint card */
-.constraint-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  padding: 32px 28px;
-  text-align: left;
-  animation: cardReveal 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  opacity: 0;
-  transform: translateY(6px);
-}
 
-@keyframes cardReveal {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+
+
 }
 
 .card-title {
@@ -642,10 +631,220 @@ body {
   border-radius: 2px;
 }
 
-  </style>
+  
+
+/* Legendary tag */
+.legendary-tag {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 16px;
+  animation: legendaryPulse 2s ease-in-out infinite;
+}
+
+@keyframes legendaryPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Legendary card variant */
+.card-legendary {
+  border-color: var(--accent-dim);
+  background: rgba(200, 184, 150, 0.03);
+}
+
+/* Enhanced card reveal - remove duplicate definition and update */
+.constraint-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 32px 28px;
+  text-align: left;
+  animation: cardReveal 500ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 100ms;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  
+
+/* ═══════════════════════════════════════════════════════
+   DEV MODE PANEL (hidden by default)
+   ═══════════════════════════════════════════════════════ */
+
+#dev-panel {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 320px;
+  max-height: 80vh;
+  background: rgba(20, 20, 20, 0.98);
+  border: 2px solid var(--accent-dim);
+  z-index: 10000;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+}
+
+.dev-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--accent-dim);
+  color: var(--bg);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+
+.dev-title {
+  font-size: 0.8rem;
+}
+
+.dev-close {
+  background: none;
+  border: none;
+  color: var(--bg);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+}
+
+.dev-close:hover {
+  color: var(--danger);
+}
+
+.dev-body {
+  padding: 16px;
+}
+
+.god-badge {
+  background: var(--danger);
+  color: #fff;
+  padding: 8px 12px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  animation: godPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes godPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.dev-section {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dev-section:last-child {
+  border-bottom: none;
+}
+
+.dev-section h3 {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.god-section h3 {
+  color: var(--danger);
+}
+
+.dev-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.dev-btn:hover {
+  border-color: var(--accent-dim);
+  color: var(--accent);
+  background: rgba(200, 184, 150, 0.05);
+}
+
+.dev-btn-god {
+  border-color: var(--danger-dim);
+  color: var(--text-secondary);
+}
+
+.dev-btn-god:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(139, 58, 58, 0.1);
+}
+
+.dev-section label {
+  display: block;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-size: 0.7rem;
+}
+
+#dev-timer-input {
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+#dev-timer-input:focus {
+  outline: none;
+  border-color: var(--accent-dim);
+}
+
+/* Scrollbar for dev panel */
+#dev-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+#dev-panel::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+#dev-panel::-webkit-scrollbar-thumb {
+  background: var(--border-active);
+  border-radius: 3px;
+}
+</style>
 </head>
 <body>
   <div id="app"></div>
+
+  <!-- Inline JSON data -->
   <script id="data-strings" type="application/json">
 {
   "app": {
@@ -797,6 +996,56 @@ body {
     "id": "rhythm_008",
     "title": "The Off-Grid",
     "description": "No event may land on a strong beat. Every attack must be syncopated. If it falls on beat 1, it is wrong."
+  },
+  {
+    "id": "rhythm_009",
+    "title": "The Pulse Debt",
+    "description": "Every 20 seconds of rhythm must be followed by 5 seconds of silence. No exceptions."
+  },
+  {
+    "id": "rhythm_010",
+    "title": "The Static Tempo",
+    "description": "Choose a tempo. You must not change it, modulate it, or imply any variation for the entire piece."
+  },
+  {
+    "id": "rhythm_011",
+    "title": "The Broken Grid",
+    "description": "Half of your rhythmic events must be deliberately off-grid. They cannot be quantized."
+  },
+  {
+    "id": "rhythm_012",
+    "title": "The Acceleration Trap",
+    "description": "Start at 60 BPM. Increase tempo by exactly 5 BPM every minute."
+  },
+  {
+    "id": "rhythm_013",
+    "title": "The One Pattern",
+    "description": "Write one rhythmic pattern of maximum 2 bars. The entire piece must use only this pattern."
+  },
+  {
+    "id": "rhythm_014",
+    "title": "The Missing Downbeat",
+    "description": "You may never place a note or kick on beat 1."
+  },
+  {
+    "id": "rhythm_015",
+    "title": "The Asymmetry",
+    "description": "Every bar must have a different rhythmic pattern. No repetition allowed."
+  },
+  {
+    "id": "rhythm_016",
+    "title": "The Collapse",
+    "description": "At minute 45, all rhythm must simplify to a single repeating pulse."
+  },
+  {
+    "id": "rhythm_017",
+    "title": "The Layered Drift",
+    "description": "Each layer must have a slightly different tempo, offset by 1 to 3 BPM. They must drift over time."
+  },
+  {
+    "id": "rhythm_018",
+    "title": "The Fragmentation",
+    "description": "No rhythmic phrase may exceed 2 seconds."
   }
 ]
   </script>
@@ -841,6 +1090,56 @@ body {
     "id": "texture_008",
     "title": "The Mirror",
     "description": "Split the ensemble into two groups. Group B must mirror Group A in real time \u2014 every attack reflected, every rest doubled. They are inseparable."
+  },
+  {
+    "id": "texture_009",
+    "title": "The Silence Core",
+    "description": "At least 50% of the piece must be silence."
+  },
+  {
+    "id": "texture_010",
+    "title": "The Harmonic Freeze",
+    "description": "All harmonic content must stay within a single chord. No modulation, no substitution, no progression."
+  },
+  {
+    "id": "texture_011",
+    "title": "The Register Lock",
+    "description": "All notes must exist within a range of one octave. No note may exceed this boundary."
+  },
+  {
+    "id": "texture_012",
+    "title": "The Dry Signal",
+    "description": "No effects allowed. No reverb, no delay, no modulation. Only the raw, direct signal."
+  },
+  {
+    "id": "texture_013",
+    "title": "The Reverse World",
+    "description": "All audio must be reversed. Every sound, every phrase, every layer."
+  },
+  {
+    "id": "texture_014",
+    "title": "The Noise Floor",
+    "description": "All sounds must be derived from noise sources. No pitched instruments, no samples."
+  },
+  {
+    "id": "texture_015",
+    "title": "The Duality",
+    "description": "Only two voices allowed. No more, no less. They must coexist for the entire piece."
+  },
+  {
+    "id": "texture_016",
+    "title": "The Extreme Range",
+    "description": "Use only the lowest or highest register of your instruments. The middle range is forbidden."
+  },
+  {
+    "id": "texture_017",
+    "title": "The Granular Field",
+    "description": "All sounds must be extremely short, grain-like. No sustained tones."
+  },
+  {
+    "id": "texture_018",
+    "title": "The Continuous Motion",
+    "description": "No sustained notes allowed. Everything must evolve or move. Stillness is forbidden."
   }
 ]
   </script>
@@ -905,9 +1204,115 @@ body {
     "id": "chaos_012",
     "title": "The Collaborator",
     "description": "Contact one other person. Give them a single constraint \u2014 not one of yours. Incorporate their response into the piece without explanation."
+  },
+  {
+    "id": "chaos_013",
+    "title": "The Reset",
+    "description": "At minute 30, delete everything and restart from silence."
+  },
+  {
+    "id": "chaos_014",
+    "title": "The Interruption",
+    "description": "At a random moment, stop for 2 minutes. Do nothing. Do not compose. Do not listen. Wait."
+  },
+  {
+    "id": "chaos_015",
+    "title": "The Overload",
+    "description": "At minute 40, double the number of active elements instantly. No transition, no preparation."
+  },
+  {
+    "id": "chaos_016",
+    "title": "The Collapse Point",
+    "description": "At minute 50, reduce everything to a single element. One sound, one voice, one gesture."
+  },
+  {
+    "id": "chaos_017",
+    "title": "The External Source",
+    "description": "You must record a new sound during the session and use it in the piece. It cannot be pre-prepared."
+  },
+  {
+    "id": "chaos_018",
+    "title": "The Disruption",
+    "description": "Introduce a sound that does not fit the piece at all. It must remain. Do not justify it."
+  },
+  {
+    "id": "chaos_019",
+    "title": "The Time Cut",
+    "description": "Remove a continuous 10-second segment from your piece. Choose where. The gap must remain."
+  },
+  {
+    "id": "chaos_020",
+    "title": "The Inversion Lock",
+    "description": "All melodies must be inverted after minute 30. Every ascending interval becomes descending, every descending becomes ascending."
+  },
+  {
+    "id": "chaos_021",
+    "title": "The Memory Loss",
+    "description": "You may not listen to anything you created before minute 20 again. Compose the rest from memory only."
+  },
+  {
+    "id": "chaos_022",
+    "title": "The Final Constraint",
+    "description": "The last 5 minutes must be composed in complete silence. No playback. No monitoring. Trust your decisions."
   }
 ]
   </script>
+  <script id="data-legendaryChaos" type="application/json">
+[
+  {
+    "id": "legendary_001",
+    "title": "The Void",
+    "description": "End the piece at minute 20. The remaining time is unused. The session continues, but you compose nothing."
+  },
+  {
+    "id": "legendary_002",
+    "title": "The Observer",
+    "description": "Someone else must make one critical decision for you. You must implement it without question."
+  },
+  {
+    "id": "legendary_003",
+    "title": "The Irreversible",
+    "description": "Once a sound is placed, it cannot be removed or modified. Every decision is permanent."
+  },
+  {
+    "id": "legendary_004",
+    "title": "The Blind Creation",
+    "description": "You must compose without looking at your DAW, notation, or interface. Navigate by memory and sound alone."
+  },
+  {
+    "id": "legendary_005",
+    "title": "The Time Loop",
+    "description": "Repeat the same 2 minutes of music for the entire piece. No variation, no development, no escape."
+  },
+  {
+    "id": "legendary_006",
+    "title": "The Constraint Override",
+    "description": "Ignore one of your previous constraints completely. Choose which one. The others remain in effect."
+  },
+  {
+    "id": "legendary_007",
+    "title": "The Identity Loss",
+    "description": "You must switch genre entirely halfway through. The two halves must not share aesthetic or language."
+  },
+  {
+    "id": "legendary_008",
+    "title": "The Delay Reality",
+    "description": "Everything you hear must be delayed by at least 2 seconds. You compose in the past."
+  },
+  {
+    "id": "legendary_009",
+    "title": "The Single Take",
+    "description": "You must record everything in one unbroken pass. No edits, no overdubs, no corrections."
+  },
+  {
+    "id": "legendary_010",
+    "title": "The Ending Cut",
+    "description": "The piece must stop abruptly with no resolution. No fade, no release, no closure."
+  }
+]
+  </script>
+
+  <!-- Application scripts -->
   <script>
 /**
  * state.js — Songforge State Manager
@@ -915,7 +1320,6 @@ body {
  * Single source of truth for the entire ritual.
  * No DOM references. No rendering logic.
  * Exports a state object and pure functions to mutate it.
- * Subscribers are notified on every change.
  */
 
 const State = (() => {
@@ -926,6 +1330,7 @@ const State = (() => {
     constraintType: null,      // 'rhythm' | 'texture'
     constraint: null,          // { id, title, description }
     chaos: null,               // { id, title, description }
+    legendary: false,          // true if legendary chaos was drawn
     timer: {
       total: 3600,             // 60 minutes in seconds
       remaining: 3600,
@@ -942,7 +1347,8 @@ const State = (() => {
       structures: [],
       rhythms: [],
       textures: [],
-      chaos: []
+      chaos: [],
+      legendaryChaos: []
     }
   };
 
@@ -1002,6 +1408,11 @@ const State = (() => {
     _notify();
   }
 
+  function setLegendary(isLegendary) {
+    _state.legendary = isLegendary;
+    _notify();
+  }
+
   function setStrings(strings) {
     _state.strings = strings;
   }
@@ -1024,6 +1435,7 @@ const State = (() => {
     _state.constraint = null;
     _state.chaos = null;
     _state.constraintType = null;
+    _state.legendary = false;
   }
 
   // --- Timer ---
@@ -1059,6 +1471,7 @@ const State = (() => {
       constraintType: _state.constraintType,
       constraint: _state.constraint,
       chaos: _state.chaos,
+      legendary: _state.legendary,
       frictionRating: _state.session.frictionRating,
       note: _state.session.note
     };
@@ -1089,6 +1502,7 @@ const State = (() => {
     setConstraintType,
     setConstraint,
     setChaos,
+    setLegendary,
     setStrings,
     setData,
     setFrictionRating,
@@ -1139,7 +1553,22 @@ const Draw = (() => {
     return shuffled[0];
   }
 
-  return { one };
+  /**
+   * Draw chaos with legendary chance.
+   * 15% chance to draw from legendary pool instead of normal chaos.
+   * Returns { constraint, isLegendary }
+   */
+  function chaos(normalPool, legendaryPool) {
+    const roll = Math.random();
+    const isLegendary = roll < 0.15; // 15% chance
+    
+    const pool = isLegendary ? legendaryPool : normalPool;
+    const drawn = one(pool);
+    
+    return { constraint: drawn, isLegendary };
+  }
+
+  return { one, chaos };
 })();
 
   </script>
@@ -1181,6 +1610,7 @@ const Log = (() => {
     const rating = state.session.frictionRating || '—';
     const note = state.session.note || '—';
     const date = _formatDate(state.session.startedAt);
+    const legendary = state.legendary ? ' [LEGENDARY]' : '';
 
     const lines = [
       '─────────────────────────',
@@ -1199,7 +1629,7 @@ const Log = (() => {
       `${c.title || '—'}`,
       `${c.description || ''}`,
       '',
-      '─── III. Chaos ───────────',
+      `─── III. Chaos${legendary} ───────────`,
       `${ch.title || '—'}`,
       `${ch.description || ''}`,
       '',
@@ -1217,15 +1647,193 @@ const Log = (() => {
 
   </script>
   <script>
+
 /**
- * ui.js — UI Renderer
- * 
- * The only module that touches the DOM.
- * Subscribes to State. On every change, renders the correct phase.
- * All text comes from State.strings (i18n-ready).
- * All event handlers are bound here and delegate to State or other modules.
+ * DevMode.js — Hidden development tools
+ * Only active when ?dev=true is in URL
+ * God mode requires ?dev=true&god=true
  */
 
+const DevMode = (() => {
+  if (!isDevMode) return { init: () => {} }; // Disabled by default
+
+  let panel = null;
+
+  function createPanel() {
+    panel = document.createElement('div');
+    panel.id = 'dev-panel';
+    panel.innerHTML = `
+      <div class="dev-header">
+        <span class="dev-title">🔧 DEV MODE</span>
+        <button class="dev-close" id="dev-close">×</button>
+      </div>
+      <div class="dev-body">
+        ${isGodMode ? '<div class="god-badge">⚡ GOD MODE</div>' : ''}
+        
+        <div class="dev-section">
+          <h3>Phase Control</h3>
+          <button class="dev-btn" data-action="skip-to-timer">Skip to Timer</button>
+          <button class="dev-btn" data-action="skip-to-end">Skip to End</button>
+          <button class="dev-btn" data-action="reset">Reset Session</button>
+        </div>
+
+        ${isGodMode ? `
+        <div class="dev-section god-section">
+          <h3>God Mode</h3>
+          <button class="dev-btn dev-btn-god" data-action="reroll-structure">Reroll Structure</button>
+          <button class="dev-btn dev-btn-god" data-action="reroll-constraint">Reroll ${State.get('constraintType') || 'Constraint'}</button>
+          <button class="dev-btn dev-btn-god" data-action="reroll-chaos">Reroll Chaos</button>
+          <button class="dev-btn dev-btn-god" data-action="force-legendary">Force Legendary</button>
+        </div>
+        ` : ''}
+
+        <div class="dev-section">
+          <h3>Timer Control</h3>
+          <label>Set timer (seconds): <input type="number" id="dev-timer-input" value="10" min="1" max="3600" /></label>
+          <button class="dev-btn" data-action="set-timer">Apply</button>
+        </div>
+
+        <div class="dev-section">
+          <h3>State Inspector</h3>
+          <button class="dev-btn" data-action="log-state">Log State</button>
+          <button class="dev-btn" data-action="log-pools">Log Constraint Pools</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(panel);
+    attachEventListeners();
+  }
+
+  function attachEventListeners() {
+    document.getElementById('dev-close').addEventListener('click', () => {
+      panel.style.display = 'none';
+    });
+
+    document.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const action = e.target.dataset.action;
+        handleAction(action);
+      });
+    });
+  }
+
+  function handleAction(action) {
+    console.log(`[DEV] Action: ${action}`);
+
+    switch (action) {
+      case 'skip-to-timer':
+        // Set dummy constraints if not set
+        if (!State.get('structure')) {
+          State.setStructure(Draw.one(State.get('data').structures));
+        }
+        if (!State.get('constraintType')) {
+          State.setConstraintType('rhythm');
+        }
+        if (!State.get('constraint')) {
+          State.setConstraint(Draw.one(State.get('data').rhythms));
+        }
+        if (!State.get('chaos')) {
+          const result = Draw.chaos(State.get('data').chaos, State.get('data').legendaryChaos);
+          State.setChaos(result.constraint);
+          State.setLegendary(result.isLegendary);
+        }
+        State.startTimer();
+        break;
+
+      case 'skip-to-end':
+        if (!State.get('structure')) State.setStructure(Draw.one(State.get('data').structures));
+        if (!State.get('constraintType')) State.setConstraintType('rhythm');
+        if (!State.get('constraint')) State.setConstraint(Draw.one(State.get('data').rhythms));
+        if (!State.get('chaos')) {
+          const result = Draw.chaos(State.get('data').chaos, State.get('data').legendaryChaos);
+          State.setChaos(result.constraint);
+          State.setLegendary(result.isLegendary);
+        }
+        State.setPhase('end');
+        break;
+
+      case 'reset':
+        location.reload();
+        break;
+
+      case 'reroll-structure':
+        if (!isGodMode) return;
+        State.setStructure(Draw.one(State.get('data').structures));
+        console.log('[GOD] Structure rerolled');
+        break;
+
+      case 'reroll-constraint':
+        if (!isGodMode) return;
+        const type = State.get('constraintType');
+        if (type) {
+          const pool = type === 'rhythm' ? State.get('data').rhythms : State.get('data').textures;
+          State.setConstraint(Draw.one(pool));
+          console.log(`[GOD] ${type} rerolled`);
+        }
+        break;
+
+      case 'reroll-chaos':
+        if (!isGodMode) return;
+        const result = Draw.chaos(State.get('data').chaos, State.get('data').legendaryChaos);
+        State.setChaos(result.constraint);
+        State.setLegendary(result.isLegendary);
+        console.log('[GOD] Chaos rerolled', result.isLegendary ? '[LEGENDARY]' : '');
+        break;
+
+      case 'force-legendary':
+        if (!isGodMode) return;
+        const legendary = Draw.one(State.get('data').legendaryChaos);
+        State.setChaos(legendary);
+        State.setLegendary(true);
+        console.log('[GOD] Forced legendary:', legendary.title);
+        break;
+
+      case 'set-timer':
+        const seconds = parseInt(document.getElementById('dev-timer-input').value, 10);
+        if (seconds > 0) {
+          State.get('timer').total = seconds;
+          State.get('timer').remaining = seconds;
+          console.log(`[DEV] Timer set to ${seconds}s`);
+        }
+        break;
+
+      case 'log-state':
+        console.log('[DEV] Current State:', State.getState());
+        break;
+
+      case 'log-pools':
+        console.log('[DEV] Constraint Pools:', {
+          structures: State.get('data').structures.length,
+          rhythms: State.get('data').rhythms.length,
+          textures: State.get('data').textures.length,
+          chaos: State.get('data').chaos.length,
+          legendary: State.get('data').legendaryChaos.length
+        });
+        break;
+    }
+  }
+
+  function init() {
+    createPanel();
+    
+    // Keyboard shortcut: Ctrl+D to toggle panel
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'd') {
+        e.preventDefault();
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+
+    console.log('[DEV] Panel initialized. Press Ctrl+D to toggle.');
+  }
+
+  return { init };
+})();
+
+  </script>
+
+  <script>
 const UI = (() => {
   const root = document.getElementById('app');
 
@@ -1372,11 +1980,23 @@ const UI = (() => {
     
     // Only draw if we haven't drawn yet
     let drawn = State.get('chaos');
+    let isLegendary = State.get('legendary');
+    
     if (!drawn) {
-      drawn = Draw.one(State.get('data').chaos);
+      const result = Draw.chaos(
+        State.get('data').chaos,
+        State.get('data').legendaryChaos
+      );
+      drawn = result.constraint;
+      isLegendary = result.isLegendary;
+      
       State.setChaos(drawn);
+      State.setLegendary(isLegendary);
       return; // Exit and let the state change trigger a re-render
     }
+
+    const legendaryClass = isLegendary ? 'card-legendary' : '';
+    const legendaryLabel = isLegendary ? '<span class="legendary-tag">LEGENDARY</span>' : '';
 
     root.innerHTML = `
       <div class="screen screen-draw">
@@ -1386,7 +2006,8 @@ const UI = (() => {
             <span class="step-label">${t('draw.chaos_label')}</span>
           </div>
           <p class="chaos-warning">${t('draw.chaos_warning')}</p>
-          <div class="constraint-card card-chaos" id="card-chaos">
+          ${legendaryLabel}
+          <div class="constraint-card card-chaos ${legendaryClass}" id="card-chaos">
             <h2 class="card-title">${drawn.title}</h2>
             <p class="card-desc">${drawn.description}</p>
           </div>
@@ -1665,8 +2286,9 @@ https://studiosalzani.github.io/songforge/`;
 
   return { init };
 })();
-
   </script>
+
+  <!-- Bootstrap -->
   <script>
 (function bootstrap() {
   try {
@@ -1675,12 +2297,20 @@ https://studiosalzani.github.io/songforge/`;
       if (!el) throw new Error('Missing data element: ' + id);
       return JSON.parse(el.textContent);
     }
+    
     State.setStrings(loadInlineJSON('data-strings'));
     State.setData('structures', loadInlineJSON('data-structures'));
-    State.setData('rhythms',    loadInlineJSON('data-rhythms'));
-    State.setData('textures',   loadInlineJSON('data-textures'));
-    State.setData('chaos',      loadInlineJSON('data-chaos'));
+    State.setData('rhythms', loadInlineJSON('data-rhythms'));
+    State.setData('textures', loadInlineJSON('data-textures'));
+    State.setData('chaos', loadInlineJSON('data-chaos'));
+    State.setData('legendaryChaos', loadInlineJSON('data-legendaryChaos'));
+    
     UI.init();
+    
+    // Initialize dev mode if active
+    if (isDevMode) {
+      DevMode.init();
+    }
   } catch (err) {
     document.getElementById('app').innerHTML =
       '<div style="color:#fff;font-family:monospace;padding:40px;max-width:600px;margin:0 auto">' +
