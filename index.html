@@ -2287,7 +2287,11 @@ https://studiosalzani.github.io/songforge/`;
   return { init };
 })();
   </script>
-
+  
+const isDevMode =
+  window.location.hostname === 'localhost' ||
+  window.location.search.includes('dev=true');
+  
   <!-- Bootstrap -->
   <script>
 (function bootstrap() {
