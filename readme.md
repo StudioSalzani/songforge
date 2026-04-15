@@ -1,4 +1,4 @@
-# Songforge — The Book of Maledictions
+# Songforge - The Book of Maledictions
 
 Songforge is a constraint-based music composition ritual.
 
