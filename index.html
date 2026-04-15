@@ -2288,12 +2288,13 @@ https://studiosalzani.github.io/songforge/`;
 })();
   </script>
   
-const isDevMode =
-  window.location.hostname === 'localhost' ||
-  window.location.search.includes('dev=true');
   
   <!-- Bootstrap -->
   <script>
+    // DEV MODE FLAG (GLOBAL)
+const isDevMode =
+  window.location.hostname === 'localhost' ||
+  window.location.search.includes('dev=true');
 (function bootstrap() {
   try {
     function loadInlineJSON(id) {
