@@ -2288,6 +2288,45 @@ https://studiosalzani.github.io/songforge/`;
 })();
   </script>
   
+  <script>
+const DevMode = (() => {
+  function init() {
+    console.log("DevMode enabled");
+
+    // Petit overlay discret pour confirmer visuellement
+    const badge = document.createElement('div');
+    badge.textContent = 'DEV MODE';
+    badge.style.position = 'fixed';
+    badge.style.bottom = '10px';
+    badge.style.right = '10px';
+    badge.style.fontSize = '10px';
+    badge.style.fontFamily = 'monospace';
+    badge.style.color = '#6b5e3f';
+    badge.style.opacity = '0.6';
+    document.body.appendChild(badge);
+
+    // GOD MODE detection
+    const isGodMode = window.location.search.includes('god=true');
+
+    if (isGodMode) {
+      console.log("God Mode enabled");
+
+      const godBadge = document.createElement('div');
+      godBadge.textContent = 'GOD MODE';
+      godBadge.style.position = 'fixed';
+      godBadge.style.bottom = '25px';
+      godBadge.style.right = '10px';
+      godBadge.style.fontSize = '10px';
+      godBadge.style.fontFamily = 'monospace';
+      godBadge.style.color = '#8b3a3a';
+      godBadge.style.opacity = '0.6';
+      document.body.appendChild(godBadge);
+    }
+  }
+
+  return { init };
+})();
+</script>
   
   <!-- Bootstrap -->
   <script>
