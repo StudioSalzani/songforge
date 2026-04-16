@@ -845,6 +845,20 @@ body {
   <div id="app"></div>
 
   <!-- Inline JSON data -->
+  <!-- Dev Mode Detection (Global) -->
+  <script>
+// Detect dev/god modes from URL
+window.SONGFORGE_DEV_MODE = (new URLSearchParams(window.location.search)).get('dev') === 'true';
+window.SONGFORGE_GOD_MODE = window.SONGFORGE_DEV_MODE && (new URLSearchParams(window.location.search)).get('god') === 'true';
+
+if (window.SONGFORGE_DEV_MODE) {
+  console.log('%c🔧 DEV MODE ACTIVE', 'color: #c8b896; font-size: 16px; font-weight: bold;');
+  if (window.SONGFORGE_GOD_MODE) {
+    console.log('%c⚡ GOD MODE ACTIVE', 'color: #ff6b6b; font-size: 16px; font-weight: bold;');
+  }
+}
+  </script>
+
   <script id="data-strings" type="application/json">
 {
   "app": {
@@ -1655,7 +1669,7 @@ const Log = (() => {
  */
 
 const DevMode = (() => {
-  if (!isDevMode) return { init: () => {} }; // Disabled by default
+  if (!window.SONGFORGE_DEV_MODE) return { init: () => {} }; // Disabled by default
 
   let panel = null;
 
@@ -1668,7 +1682,7 @@ const DevMode = (() => {
         <button class="dev-close" id="dev-close">×</button>
       </div>
       <div class="dev-body">
-        ${isGodMode ? '<div class="god-badge">⚡ GOD MODE</div>' : ''}
+        ${window.SONGFORGE_GOD_MODE ? '<div class="god-badge">⚡ GOD MODE</div>' : ''}
         
         <div class="dev-section">
           <h3>Phase Control</h3>
@@ -1677,7 +1691,7 @@ const DevMode = (() => {
           <button class="dev-btn" data-action="reset">Reset Session</button>
         </div>
 
-        ${isGodMode ? `
+        ${window.SONGFORGE_GOD_MODE ? `
         <div class="dev-section god-section">
           <h3>God Mode</h3>
           <button class="dev-btn dev-btn-god" data-action="reroll-structure">Reroll Structure</button>
@@ -1758,13 +1772,13 @@ const DevMode = (() => {
         break;
 
       case 'reroll-structure':
-        if (!isGodMode) return;
+        if (!window.SONGFORGE_GOD_MODE) return;
         State.setStructure(Draw.one(State.get('data').structures));
         console.log('[GOD] Structure rerolled');
         break;
 
       case 'reroll-constraint':
-        if (!isGodMode) return;
+        if (!window.SONGFORGE_GOD_MODE) return;
         const type = State.get('constraintType');
         if (type) {
           const pool = type === 'rhythm' ? State.get('data').rhythms : State.get('data').textures;
@@ -1774,7 +1788,7 @@ const DevMode = (() => {
         break;
 
       case 'reroll-chaos':
-        if (!isGodMode) return;
+        if (!window.SONGFORGE_GOD_MODE) return;
         const result = Draw.chaos(State.get('data').chaos, State.get('data').legendaryChaos);
         State.setChaos(result.constraint);
         State.setLegendary(result.isLegendary);
@@ -1782,7 +1796,7 @@ const DevMode = (() => {
         break;
 
       case 'force-legendary':
-        if (!isGodMode) return;
+        if (!window.SONGFORGE_GOD_MODE) return;
         const legendary = Draw.one(State.get('data').legendaryChaos);
         State.setChaos(legendary);
         State.setLegendary(true);
@@ -2308,7 +2322,7 @@ https://studiosalzani.github.io/songforge/`;
     UI.init();
     
     // Initialize dev mode if active
-    if (isDevMode) {
+    if (window.SONGFORGE_DEV_MODE) {
       DevMode.init();
     }
   } catch (err) {
